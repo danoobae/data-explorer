@@ -6,12 +6,10 @@ shiny_container <- function(header, ...) {
   margin: 40px 0;"
 
   h3_style <- "
-  font: bold 12px Sans-Serif;
+  font: 16px Roboto;
   letter-spacing: 2px;
-  text-align: center;
-  text-transform: uppercase;
-  background: #369;
-  color: #fff;
+  text-align: left;
+  color: #000000;
   padding: 5px 10px;
   margin: 0 0 10px 0;
   line-height: 24px;

@@ -5,9 +5,28 @@ function(input, output, session) {
   sever(html = disconnected, bg_color = "white", color = "black")
 
   # ----------------------------------------------------------------------------
+  #' Help and Tour
+  # ----------------------------------------------------------------------------  
+  observeEvent(input$help, {
+    alert_tour(session)
+  })
+  
+  observeEvent(input$first_time, {
+    if (input$first_time) guide$init()$start()
+  })
+  
+  observeEvent(input$helpFilter, {
+    alert_tourFilter(session)
+  })
+  
+  observeEvent(input$first_timeFilter, {
+    if (input$first_timeFilter) guidefilter$init()$start()
+  })
+  
+  # ----------------------------------------------------------------------------
   #' Waiting screens
   # ----------------------------------------------------------------------------
-  w <- Waiter$new(html = span("Initialising"))
+  # w <- Waiter$new(html = span("Initialising"))
 
   # ----------------------------------------------------------------------------
   #' Reactive values
@@ -25,7 +44,7 @@ function(input, output, session) {
   # ----------------------------------------------------------------------------
   observeEvent(input$pick_data_button, {
     showModal(modalDialog(
-      title = "Please pick one of the available datasets",
+      title = HTML("Under construction. Please judge me from the inside.<br>k, thankss!<br>-jb💕"),
       radioGroupButtons(
         inputId = "data_button",
         label = NULL,
@@ -40,7 +59,7 @@ function(input, output, session) {
   #' When actionButton is clicked, hide langing page, show main page
   # ----------------------------------------------------------------------------
   observeEvent(input$data_button, {
-    w$show()
+    # w$show()
     dat_path <- paste0("data/", input$data_button)
     rv$dat <- read_dat(dat_path)
     rv$dat_filtered <- rv$dat
@@ -142,7 +161,7 @@ function(input, output, session) {
     shinyjs::hide("ui_landing")
     shinyjs::show("ui_main")
     removeModal()
-    w$hide()
+    # w$hide()
   }, ignoreInit = TRUE)
 
   # ----------------------------------------------------------------------------
@@ -165,34 +184,71 @@ function(input, output, session) {
   #' When the apply filters button is clicked, open a modal
   # ----------------------------------------------------------------------------
   observeEvent(input$apply_filters_button, {
-    showModal(modalDialog(
-      title = "Filter controls",
-      selectInput(
-        inputId = "filter_select",
-        label = "Available filters",
-        choices = names(rv$dat),
-        multiple = TRUE,
-        width = "100%",
-        selected = {
-          if (is.null(input$filter_select))
-            NULL
-          else
-            input$filter_select
-        }
-      ),
-      actionButton(
-        inputId = "render_filters_button",
-        label = "Render filters",
-        icon = icon("rocket"),
-        width = "100%"
-      ),
-      br(), br(),
-      shinycssloaders::withSpinner(uiOutput("filter_render"), 8),
-      footer = tagList(
-        modalButton("Cancel"),
-        actionButton("confirm_filter_modal", "Confirm")
-      )
-    ))
+    showModal(
+      modalDialog(
+        title = tags$h3(style = paste0("font: 80px Helvetica;",
+                                       "font-weight: 790;",
+                                       "letter-spacing: 0px;",
+                                       "text-align: center;",
+                                       "color: #adc8e0;",
+                                       "padding: 0px 0px;",
+                                       "margin: 20px 0px 0px 0px;",
+                                       "line-height: 89px;",
+                                       "position: absolute;", 
+                                       "top: 0px;"), 
+                        "Filter Controls"),
+        br(),br(),
+        tags$style(HTML(".selected {background-color:#d4eaff;}")),
+        pickerInput(
+          inputId = "filter_select",
+          choices = names(rv$dat),
+          multiple = TRUE,
+          width = "100%",
+          options = pickerOptions(
+            actionsBox = TRUE,
+            size = 10,
+            virtualScroll = FALSE,
+            liveSearch = TRUE
+          ),
+          selected = {
+            if (is.null(input$filter_select))
+              NULL
+            else
+              input$filter_select
+          }
+        ),
+        actionButton(
+          inputId = "render_filters_button",
+          label = "Create Filters",
+          icon = icon("rocket"),
+          style = paste0("width:100%;",
+                         "opacity: 0.77;",
+                         "color: #292929;",
+                         "border: 1.5px solid #a0aeba;",
+                         "font-weight: 700;",
+                         "font-size: 16px")
+        ),
+        br(), br(),
+        shinycssloaders::withSpinner(uiOutput("filter_render"), 8),
+        footer = tagList(
+          column(width = 4, 
+                 align = "left", 
+                 actionButton(inputId = "cancel_filter_modal", 
+                              label = "Cancel", 
+                              icon("times-circle"))),
+          column(width = 4, 
+                 align = "left", 
+                 actionButton(inputId = "helpFilter", 
+                              label = "Take a Tour", 
+                              icon("question-circle"))),
+          
+          column(width = 4, 
+                 align = "right", 
+                 actionButton(inputId = "confirm_filter_modal", 
+                              label = "Apply", 
+                              icon("check-circle")))
+        )
+      ))
   })
 
   output$filter_render <- renderUI({
@@ -200,12 +256,18 @@ function(input, output, session) {
       shinyjs::hidden(
         div(
           id = paste0("dd_", x),
-          selectInput(
+          pickerInput(
             inputId = x,
             label = gsub("[.]", " ", x),
             choices = NULL,
             width = "100%",
-            multiple = TRUE
+            multiple = TRUE, 
+            options = pickerOptions(
+              actionsBox = TRUE,
+              size = 10,
+              virtualScroll = FALSE,
+              liveSearch = TRUE
+            )
           )
         )
       )
@@ -216,7 +278,7 @@ function(input, output, session) {
     for (i in names(rv$dat)) {
       if (i %in% input$filter_select) {
         if (is.null(input[[i]])) {
-          updateSelectInput(
+          updatePickerInput(
             session = session,
             inputId = i,
             choices = sort(unique(rv$dat[[i]]))
@@ -239,7 +301,7 @@ function(input, output, session) {
         col <- x$col
         selected_vals <- x$selected_vals
         all_vals <- x$all_vals
-        updateSelectInput(session, col, choices = all_vals, selected = selected_vals)
+        updatePickerInput(session, col, choices = all_vals, selected = selected_vals)
         shinyjs::show(paste0("dd_", col))
       })
     }
@@ -268,6 +330,10 @@ function(input, output, session) {
   #' close so that we can restore them in the future. We also update the
   #' reactable table
   # ----------------------------------------------------------------------------
+  observeEvent(input$cancel_filter_modal, {
+    removeModal()
+    })
+  
   observeEvent(input$confirm_filter_modal, {
     removeModal()
 

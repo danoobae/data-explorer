@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+/*font-family: 'Varela Round', sans-serif;*/
+/*
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+}
+*/
+
+
+h1 { font-family: Helvetica; font-size: 50px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 36.3px; } h3 { font-family: Helvetica; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 15.4px; } p { font-family: Helvetica; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 20px; } blockquote { font-family: Helvetica; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 30px; } pre { font-family: Helvetica; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 18.5714px; }
+
+
+::selection {
+  color: #f7a1ed;
+  background: #000000;
+}
+
+filter_select.selected {
+    background-color:blue;
+}
+
+.nav_header {
+  font-family: Helvetica;
+  font-size: 17px;
+}
+
+
+/* for custom landing screen */
+.landing-container {
+  position: relative;
+  text-align: center;
+}
+
+/* for custom landing screen */
+.landing-centered-text {
+  font-family: Helvetica; 
+  font-size: 275px; 
+  font-style: normal; 
+  font-variant: normal; 
+  font-weight: 700; 
+  line-height: 200px;
+  position: absolute;
+  top: 28%;
+  left: 24.5%;
+  right: 20%;
+  color: #f7a1ed;
+  text-align: left;
+  z-index: -1;
+}
+
+#help, #change_data_button, #download_button, #rerun_button, #apply_filters_button {
+  width:150px;
+  margin: 5px 10px 2px 10px;
+  opacity: 0.77;
+  color: #292929;
+  border: 1.5px solid #a0b7ba;
+  font-weight: 700;
+  font-size: 16px
+}
+
+#filter_header, #data_table_header {
+  font: 125px Helvetica;
+  font-weight: bold;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #add9e0;
+  padding: 0px 0px;
+  margin: 0px 0px 0px 0px;
+  line-height: 93px;
+  position: absolute;
+  top: -22px;
+  z-index: -1;
+}
+
+#pick_data_button {
+  width: 200px;
+  opacity: 1;
+  color: #292929;
+  border: 2.5px solid #f7a1ed;
+  font-weight: 700;
+  font-size: 30px;
+  align: left
+}
+
+#cancel_filter_modal, #helpFilter, #confirm_filter_modal {
+  width:150px;
+  margin: 5px 10px 2px 10px;
+  opacity: 0.77;
+  color: #292929;
+  border: 1.5px solid #a0aeba;
+  font-weight: 700;
+  font-size: 16px
+}
+
